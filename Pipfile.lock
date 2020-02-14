@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "acbc8c4e7f2f98f1059b2a93d581ef43f4aa0c9741e64e6253adff8e35fbd99e"
+            "sha256": "cd11523bc8056f4626a763bb4871ba4195c9928d1d063d7afe58c31add38a4ec"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -30,6 +30,19 @@
             ],
             "version": "==3.0.4"
         },
+        "dicttoxml": {
+            "hashes": [
+                "sha256:ea44cc4ec6c0f85098c57a431a1ee891b3549347b07b7414c8a24611ecf37e45"
+            ],
+            "version": "==1.7.4"
+        },
+        "huawei-lte-api": {
+            "hashes": [
+                "sha256:5cbd98af9d6a01b9a3a0530dbf7f67761a51c66bd59f329b0ee1f2c92821b3d4"
+            ],
+            "index": "pypi",
+            "version": "==1.4.7"
+        },
         "idna": {
             "hashes": [
                 "sha256:c357b3f628cf53ae2c4c05627ecc484553142ca23264e593d327bcde5e9c3407",
@@ -51,6 +64,13 @@
                 "sha256:87716c2d2a7121198ebcb7ce7cccf6ce5e9ba539041cfbaeecfb641dc0bf6acc"
             ],
             "version": "==1.25.8"
+        },
+        "xmltodict": {
+            "hashes": [
+                "sha256:50d8c638ed7ecb88d90561beedbf720c9b4e851a9fa6c47ebd64e99d166d8a21",
+                "sha256:8bbcb45cc982f48b2ca8fe7e7827c5d792f217ecf1792626f808bf41c3b86051"
+            ],
+            "version": "==0.12.0"
         }
     },
     "develop": {}
