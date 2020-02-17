@@ -7,12 +7,13 @@ import sys
 
 def banner():
     motd = """
-    -----------------------------------------------------------------------------
-    | Program created to gather information about your Huawei router            |
-    | for a forensic analysis. Even if Huawei don't disclose much to the public.|
-    |                                                                           |
-    | Default username/password is admin/admin.                                 |
-    -----------------------------------------------------------------------------
+    ##################################################################
+    # Program created to gather information about your Huawei router #
+    # for a forensic analysis.                                       #
+    # Use it with caution, every call to the API can alter the data  #
+    #                                                                #
+    # Default username/password is admin/admin.                      #
+    ##################################################################
     """
     print(motd)
 
@@ -50,14 +51,18 @@ def main():
 
     try:
         # connection = Connection('http://192.168.8.1/') For limited access, I have valid credentials no need for limited access
-        connection = AuthorizedConnection('http://'+args.username+':'+args.password+'@'+args.ip+'/')
+        #connection = AuthorizedConnection('http://'+args.username+':'+args.password+'@'+args.ip+'/')
+        username = "admin"
+        password = "password123"
+        connection = AuthorizedConnection('http://'+username+':'+password+'@'+args.ip+'/')
         client = Client(connection)
     except Exception as e:
         print(e)
     
     #data = getDeviceInformation(client)
+    #print(data)
     #writeToFile("test.txt", data)
-    print(getDeviceInformation(client))
+    print(getCurrentISP(client))
 
 
 if __name__ == "__main__":
