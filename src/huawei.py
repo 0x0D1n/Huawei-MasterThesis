@@ -30,6 +30,14 @@ def writeToFile(filename, content):
     file = open(filename, 'w')
     file.write(content)
     file.close()
+
+def getAllInfo(client):
+    print(getISP(client))
+    print(getDeviceInformation(client))
+    print(getLanguage(client))
+    print(getConnectedDevices(client))
+    print(getTimezone(client))
+    print(getLogs(client))
     
 
 def main():
@@ -62,7 +70,9 @@ def main():
     #data = getDeviceInformation(client)
     #print(data)
     #writeToFile("test.txt", data)
-    print(getCurrentISP(client))
+
+    #print(getAllInfo(client))
+    print(getConnectedDevices(client))
 
 
 if __name__ == "__main__":
