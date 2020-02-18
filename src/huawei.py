@@ -55,16 +55,16 @@ def main():
     ### Command line -helper for args
     import argparse
     parser = argparse.ArgumentParser(description="Huawei B315s-22 4G router information gathering tool")
-    parser.add_argument("-i", "--ip", type=str, help="IP address of the router", metavar=('IP Router'))
+    parser.add_argument("-i", "--ip", type=str, help="IP address of the router", metavar=("IP Router"))
     parser.add_argument("-n", "--nologin", action='store_true', help="Use this if you don't have any credentials")
     parser.add_argument("-u", "--username", type=str, default="admin", help="Username used to login to the router, default=admin")
     parser.add_argument("-p", "--password", type=str, default="admin", help="Password used to login to the router, default=admin")
-    parser.add_argument("-w", "--write", type=str, help="Filename", metavar=('FILENAME'))
+    parser.add_argument("-w", "--write", type=str, help="Filename", metavar=("FILENAME"))
     args = parser.parse_args()
 
     #Check if atleast the ip address is given
     if args.ip == None:
-        parser.print_help()
+        parser.print_usage()
     elif valid_ip(args.ip) == False:
         sys.exit("Enter a valid IP address")
 
@@ -81,7 +81,7 @@ def main():
         except Exception as e:
             print(e)
     
-    if args.username and args.password:
+    if args.username == True and args.password == True:
         try:
             connection = AuthorizedConnection('http://'+args.username+':'+args.password+'@'+args.ip+'/')
             client = Client(connection)

@@ -87,7 +87,7 @@ def getTimezone(client):
 
 def getLogs(client):
     """
-    Retrieve SysLogs - ONLY ONE AVAILABLE WITHOUT TOUCHING THE HARDWARE SEEMS LIKE
+    Retrieve SysLogs - ONLY LOGS AVAILABLE WITHOUT TOUCHING THE HARDWARE SEEMS LIKE
     Log format: "Time","Level","Module name","Result","Content"
     Level : 0 -> Informative
     Level : 1 -> Warning
