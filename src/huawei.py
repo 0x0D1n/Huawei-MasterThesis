@@ -1,4 +1,4 @@
-from huaweiapi import *
+from huawei_api import *
 from huawei_lte_api.Connection import Connection
 from huawei_lte_api.Client import Client
 from huawei_lte_api.AuthorizedConnection import AuthorizedConnection
@@ -31,48 +31,68 @@ def writeToFile(filename, content):
     file.write(content)
     file.close()
 
-def getAllInfo(client):
-    print(getISP(client))
-    print(getDeviceInformation(client))
-    print(getLanguage(client))
-    print(getConnectedDevices(client))
-    print(getTimezone(client))
-    print(getLogs(client))
+#Gather all the data using credentials
+def getAllInfoLogin(client):
+    data = getISP(client) + "\n"
+    data += getDeviceInformation(client) + "\n"
+    data += getLanguage(client) + "\n"
+    data += getConnectedDevices(client) + "\n"
+    data += getTimezone(client) + "\n"
+    data += getLogs(client)
+    return data
+
+#Gather all the data without credentials
+def getAllInfoWithoutLogin(client):
+    data = getISP(client) + "\n"
+    data += getLanguage(client) + "\n"
+    data += getTimezone(client) + "\n"
+    data += getLogs(client)
+    return data
     
 
 def main():
     banner()
     ### Command line -helper for args
     import argparse
-    parser = argparse.ArgumentParser(description="Huawei-router information gathering")
-    parser.add_argument("-i", "--ip", type=str, help="IP address of the router")
+    parser = argparse.ArgumentParser(description="Huawei B315s-22 4G router information gathering tool")
+    parser.add_argument("-i", "--ip", type=str, help="IP address of the router", metavar=('IP Router'))
+    parser.add_argument("-n", "--nologin", action='store_true', help="Use this if you don't have any credentials")
     parser.add_argument("-u", "--username", type=str, default="admin", help="Username used to login to the router, default=admin")
     parser.add_argument("-p", "--password", type=str, default="admin", help="Password used to login to the router, default=admin")
-    parser.add_argument("-w", "--write", type=str, help="Filename")
+    parser.add_argument("-w", "--write", type=str, help="Filename", metavar=('FILENAME'))
     args = parser.parse_args()
 
     #Check if atleast the ip address is given
     if args.ip == None:
-        parser.print_usage()
+        parser.print_help()
     elif valid_ip(args.ip) == False:
         sys.exit("Enter a valid IP address")
 
-    try:
-        # connection = Connection('http://192.168.8.1/') For limited access, I have valid credentials no need for limited access
-        #connection = AuthorizedConnection('http://'+args.username+':'+args.password+'@'+args.ip+'/')
-        username = "admin"
-        password = "password123"
-        connection = AuthorizedConnection('http://'+username+':'+password+'@'+args.ip+'/')
-        client = Client(connection)
-    except Exception as e:
-        print(e)
+    if args.nologin == True:
+        try:
+            connection = Connection('http://192.168.8.1/')
+            client = Client(connection)
+            data = getAllInfoWithoutLogin(client)
+            if args.write:
+                print("Data has been written into : " + args.write + "\n")
+                writeToFile(args.write, data)
+            else:
+                print(data)
+        except Exception as e:
+            print(e)
     
-    #data = getDeviceInformation(client)
-    #print(data)
-    #writeToFile("test.txt", data)
-
-    #print(getAllInfo(client))
-    print(getConnectedDevices(client))
+    if args.username and args.password:
+        try:
+            connection = AuthorizedConnection('http://'+args.username+':'+args.password+'@'+args.ip+'/')
+            client = Client(connection)
+            data = getAllInfoLogin(client)
+            if args.write:
+                print("Data has been written into : " + args.write + "\n")
+                writeToFile(args.write, data)
+            else:
+                print(data)
+        except Exception as e:
+            print(e)
 
 
 if __name__ == "__main__":

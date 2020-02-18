@@ -1,6 +1,7 @@
 from huawei_lte_api.Client import Client
-import requests as r
+import huawei_time_zones as zone
 import json
+import calendar
 
 
 def beautifyjson(jsonobj):
@@ -15,7 +16,7 @@ def getISP(client):
     data = beautifyjson(client.net.current_plmn())
     new_dict = json.loads(data)
     isp = new_dict["FullName"]
-    return "[+] Internet Service Provider(ISP) [+]\nProvider : " + isp
+    return "[+]\tInternet Service Provider(ISP)\t[+]\nProvider : " + isp + "\n"
 
 def getDeviceInformation(client):
     """
@@ -24,7 +25,7 @@ def getDeviceInformation(client):
     """
     data = beautifyjson(client.device.information())
     new_dict = json.loads(data)
-    formatted_info = "[+] Device Information [+]\n"
+    formatted_info = "[+]\tDevice Information\t[+]\n"
     formatted_info += "Device Name :\t\t" + new_dict["DeviceName"] + "\n"
     formatted_info += "Software Version : \t" + new_dict["SoftwareVersion"] + "\n"
     formatted_info += "Hardware Version : \t" + new_dict["HardwareVersion"] + "\n"
@@ -42,7 +43,11 @@ def getLanguage(client):
     """
     Retrieve the language of the router
     """
-    return beautifyjson(client.language.current_language())
+    data = beautifyjson(client.language.current_language())
+    new_dict = json.loads(data)
+    lang = new_dict["CurrentLanguage"]
+    return "[+]\tCurrent Language of router\t[+]\nLanguage: " + lang + "\n"
+
 
 def getConnectedDevices(client):
     """
@@ -50,12 +55,12 @@ def getConnectedDevices(client):
     """
     data = beautifyjson(client.wlan.host_list())
     new_dict = json.loads(data)
-    formatted_devices = "[+] List of connected devices [+]\n"
+    formatted_devices = "[+]\tList of connected devices\t[+]\n"
     if len(new_dict["Hosts"]["Host"]) == 0:
-        formatted_devices += "No connected devices currently on the WiFi"
+        formatted_devices += "No connected devices currently on the WiFi\n"
     else:
         for x in range(0, len(new_dict["Hosts"]["Host"])):
-            formatted_devices += "[+] Device number " + str(x+1) + " [+]\n"
+            formatted_devices += "[+]\tDevice number " + str(x+1) + "\t[+]\n"
             formatted_devices += "Hostname: \t" + new_dict["Hosts"]["Host"][x]["HostName"] + "\n"
             formatted_devices += "IP address: " + new_dict["Hosts"]["Host"][x]["IpAddress"] + "\n"
             formatted_devices += "Mac address: " + new_dict["Hosts"]["Host"][x]["MacAddress"] + "\n"
@@ -65,7 +70,19 @@ def getTimezone(client):
     """
     Retrieve NTP information
     """
-    return beautifyjson(client.s_ntp.get_settings())
+    data = beautifyjson(client.s_ntp.get_settings())
+    new_dict = json.loads(data)
+    current_time = new_dict["time"]
+    year = current_time[0:4]
+    month = calendar.month_name[int(current_time[4:6])] #current_time[4:6]
+    day = current_time[6:8]
+    hour = current_time[8:10]
+    minutes = current_time[10:12]
+    seconds = current_time[12:14]
+    current_time = "[+]\tNTP Information (Time)\t[+]\n"
+    current_time += "Date: " + day + " " + month + " " + year +"\nTime: " + hour + ":" + minutes + ":" + seconds
+    time_zone = "Timezone: " + zone.getTimeZoneName(new_dict["timezone"])
+    return current_time + "\n" + time_zone + "\n"
 
 
 def getLogs(client):
@@ -135,9 +152,9 @@ def getLogs(client):
         to_str = " ".join(new_data)
         new_lines.append(to_str)
     
-    formatted_logs = ""
+    formatted_logs = "[+]\tSyslog Information\t[+]\n"
 
     for x in new_lines:
         formatted_logs += x+"\n"
 
-    return formatted_logs
+    return formatted_logs + "\n"
